@@ -1,0 +1,106 @@
+# Personal Assistant Configuration
+# Last updated: 2026-03-11
+
+system:
+  name: "Personal Assistant"
+  version: "1.0.0"
+  data-format: "markdown"
+  backup-frequency: "daily"
+  timezone: "America/New_York"  # Update to your timezone
+
+# PARA Method Configuration
+organization:
+  method: "PARA"
+  active-project-limit: 5
+  archive-threshold-days: 90
+  inbox-processing-frequency: "daily"
+
+# Integrations Configuration
+integrations:
+  gmail:
+    enabled: true
+    sync-frequency: "15min"
+    labels:
+      - "assistant"
+      - "tasks"
+      - "important"
+    auto-capture-to-inbox: true
+
+  google-calendar:
+    enabled: true
+    sync-frequency: "15min"
+    calendars:
+      - "primary"
+      - "tasks"
+    auto-generate-daily-logs: true
+
+  notion:
+    enabled: true
+    sync-frequency: "hourly"
+    bidirectional: true
+    databases:
+      - "tasks"
+      - "projects"
+      - "knowledge-base"
+
+# Templates Configuration
+templates:
+  auto-load: true
+  directory: "Resources/Templates"
+  types:
+    - task
+    - project
+    - meeting
+    - daily-log
+    - financial
+  auto-generate-daily-log: true
+  daily-log-generation-time: "00:00"
+
+# Schedule Configuration
+schedule:
+  daily-review-time: "20:00"
+  weekly-review-day: "Sunday"
+  weekly-review-time: "19:00"
+  monthly-review-day: 1
+  monthly-review-time: "10:00"
+  yearly-review-day: "01-01"
+
+# Financial Configuration
+finance:
+  default-currency: "USD"
+  tracking-categories:
+    - groceries
+    - utilities
+    - healthcare
+    - transportation
+    - entertainment
+    - dining
+    - shopping
+    - education
+    - investments
+    - income
+  budget-month-start: 1
+  auto-categorize: false
+  export-format: "csv"
+
+# Knowledge Base Configuration
+knowledge-base:
+  method: "zettelkasten"
+  auto-link: true
+  fleeting-note-retention-days: 7
+  require-tags: true
+  index-file: "Resources/Knowledge-Base/index.md"
+
+# Capture Configuration
+capture:
+  default-location: "Inbox/quick-capture.md"
+  auto-timestamp: true
+  require-processing: true
+  processing-reminder: true
+
+# Archive Configuration
+archive:
+  auto-archive: true
+  archive-completed-projects: true
+  retain-project-structure: true
+  compression: false

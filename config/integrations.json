@@ -1,0 +1,126 @@
+{
+  "gmail": {
+    "sync-mapping": {
+      "labels": {
+        "tasks": "Projects/**/tasks.md",
+        "important": "Inbox/to-process.md",
+        "archive": "Archive/*",
+        "assistant": "Inbox/inbox.md"
+      },
+      "auto-capture": {
+        "enabled": true,
+        "capture-location": "Inbox/quick-capture.md",
+        "include-subject": true,
+        "include-sender": true,
+        "include-date": true
+      }
+    },
+    "filters": {
+      "exclude-spam": true,
+      "exclude-promotions": true,
+      "min-importance": "normal"
+    },
+    "credentials": {
+      "type": "oauth2",
+      "client-id": "${GMAIL_CLIENT_ID}",
+      "client-secret": "${GMAIL_CLIENT_SECRET}",
+      "redirect-uri": "http://localhost:8080/callback",
+      "scopes": [
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.labels"
+      ]
+    },
+    "sync-settings": {
+      "batch-size": 50,
+      "lookback-days": 7,
+      "incremental-sync": true
+    }
+  },
+  "google-calendar": {
+    "sync-mapping": {
+      "primary": "Schedule/calendar.md",
+      "tasks": "Projects/**/timeline.md",
+      "daily-events": "Schedule/daily/*.md"
+    },
+    "event-rules": {
+      "all-day-events": "prepend-to-daily-log",
+      "timed-events": "append-to-calendar-section",
+      "recurring-events": "generate-instances"
+    },
+    "credentials": {
+      "type": "oauth2",
+      "client-id": "${GOOGLE_CALENDAR_CLIENT_ID}",
+      "client-secret": "${GOOGLE_CALENDAR_CLIENT_SECRET}",
+      "redirect-uri": "http://localhost:8080/callback",
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/calendar.events"
+      ]
+    },
+    "sync-settings": {
+      "sync-future-days": 30,
+      "sync-past-days": 7,
+      "include-declined-events": false,
+      "include-cancelled-events": false
+    }
+  },
+  "notion": {
+    "sync-mapping": {
+      "knowledge-base": {
+        "notion-database-id": "${NOTION_KB_DATABASE_ID}",
+        "local-path": "Resources/Knowledge-Base/Permanent-Notes",
+        "sync-direction": "bidirectional"
+      },
+      "tasks-database": {
+        "notion-database-id": "${NOTION_TASKS_DATABASE_ID}",
+        "local-path": "Projects/**/tasks.md",
+        "sync-direction": "bidirectional"
+      },
+      "projects-database": {
+        "notion-database-id": "${NOTION_PROJECTS_DATABASE_ID}",
+        "local-path": "Projects",
+        "sync-direction": "bidirectional"
+      },
+      "journal": {
+        "notion-database-id": "${NOTION_JOURNAL_DATABASE_ID}",
+        "local-path": "Schedule/daily",
+        "sync-direction": "local-to-notion"
+      }
+    },
+    "field-mapping": {
+      "task": {
+        "title": "Name",
+        "status": "Status",
+        "priority": "Priority",
+        "due-date": "Due Date",
+        "tags": "Tags",
+        "project": "Project"
+      },
+      "project": {
+        "title": "Name",
+        "status": "Status",
+        "start-date": "Start Date",
+        "end-date": "End Date",
+        "owner": "Owner",
+        "progress": "Progress"
+      }
+    },
+    "credentials": {
+      "api-version": "2022-06-28",
+      "integration-token": "${NOTION_API_KEY}",
+      "workspace-id": "${NOTION_WORKSPACE_ID}"
+    },
+    "sync-settings": {
+      "conflict-resolution": "manual",
+      "export-format": "markdown",
+      "preserve-notion-properties": true,
+      "sync-attachments": true
+    }
+  },
+  "sync-log": {
+    "enabled": true,
+    "log-level": "info",
+    "retention-days": 30,
+    "log-location": "Integrations/{service}/sync-log.md"
+  }
+}

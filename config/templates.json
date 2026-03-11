@@ -1,0 +1,230 @@
+{
+  "templates": {
+    "task": {
+      "file": "Resources/Templates/task-template.md",
+      "description": "Template for individual tasks with status tracking",
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "options": ["todo", "in-progress", "done", "blocked"],
+          "default": "todo",
+          "required": true
+        },
+        {
+          "name": "priority",
+          "type": "enum",
+          "options": ["high", "medium", "low"],
+          "default": "medium",
+          "required": true
+        },
+        {
+          "name": "due-date",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": false
+        },
+        {
+          "name": "tags",
+          "type": "array",
+          "required": false
+        },
+        {
+          "name": "project",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "estimated-hours",
+          "type": "number",
+          "required": false
+        }
+      ],
+      "auto-apply-project": true,
+      "auto-timestamp": true
+    },
+    "project": {
+      "file": "Resources/Templates/project-template.md",
+      "description": "Template for project planning and tracking",
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "options": ["planning", "active", "on-hold", "completed", "cancelled"],
+          "default": "planning",
+          "required": true
+        },
+        {
+          "name": "start-date",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": true
+        },
+        {
+          "name": "end-date",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": false
+        },
+        {
+          "name": "owner",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "array",
+          "required": false
+        },
+        {
+          "name": "progress",
+          "type": "number",
+          "min": 0,
+          "max": 100,
+          "default": 0,
+          "required": false
+        }
+      ],
+      "auto-create-folder": true,
+      "include-task-file": true
+    },
+    "meeting": {
+      "file": "Resources/Templates/meeting-template.md",
+      "description": "Template for meeting notes and action items",
+      "fields": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "date",
+          "type": "datetime",
+          "format": "YYYY-MM-DD HH:mm",
+          "required": true
+        },
+        {
+          "name": "attendees",
+          "type": "array",
+          "required": false
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "options": ["standup", "planning", "review", "retrospective", "one-on-one", "client", "other"],
+          "required": false
+        },
+        {
+          "name": "project",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "auto-timestamp": true,
+      "extract-action-items": true
+    },
+    "daily-log": {
+      "file": "Resources/Templates/daily-log-template.md",
+      "description": "Template for daily planning and review",
+      "fields": [
+        {
+          "name": "date",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": true
+        },
+        {
+          "name": "day",
+          "type": "string",
+          "auto-generate": true,
+          "required": true
+        },
+        {
+          "name": "week",
+          "type": "number",
+          "auto-generate": true,
+          "required": true
+        },
+        {
+          "name": "tags",
+          "type": "array",
+          "default": ["daily-log", "review"],
+          "required": false
+        }
+      ],
+      "auto-generate": true,
+      "generation-time": "00:00",
+      "include-calendar-events": true,
+      "include-tasks-due": true
+    },
+    "financial-transaction": {
+      "file": "Resources/Templates/financial-template.md",
+      "description": "Template for tracking financial transactions",
+      "fields": [
+        {
+          "name": "date",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "enum",
+          "options": ["expense", "income", "transfer"],
+          "required": true
+        },
+        {
+          "name": "category",
+          "type": "enum",
+          "options": ["groceries", "utilities", "healthcare", "transportation", "entertainment", "dining", "shopping", "education", "investments", "salary", "freelance", "other"],
+          "required": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "default": "USD",
+          "required": true
+        },
+        {
+          "name": "account",
+          "type": "enum",
+          "options": ["checking", "savings", "credit-card", "cash", "other"],
+          "required": true
+        },
+        {
+          "name": "vendor",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "notes",
+          "type": "string",
+          "required": false
+        }
+      ],
+      "auto-timestamp": true,
+      "auto-categorize": false
+    }
+  },
+  "template-settings": {
+    "default-editor": "markdown",
+    "auto-save": true,
+    "validate-fields": true,
+    "show-field-hints": true
+  }
+}

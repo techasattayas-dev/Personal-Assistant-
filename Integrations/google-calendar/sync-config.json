@@ -1,0 +1,53 @@
+{
+  "calendar-sync": {
+    "enabled": true,
+    "sync-frequency-minutes": 15,
+    "calendars": [
+      {
+        "id": "primary",
+        "name": "Primary Calendar",
+        "sync": true,
+        "color": "blue"
+      },
+      {
+        "id": "tasks",
+        "name": "Tasks Calendar",
+        "sync": true,
+        "color": "green"
+      }
+    ],
+    "event-mapping": {
+      "all-day-events": "prepend-to-focus",
+      "timed-events": "calendar-events-section",
+      "recurring-events": "generate-instances",
+      "tentative-events": "include-with-marker"
+    },
+    "sync-direction": {
+      "calendar-to-local": true,
+      "local-to-calendar": false
+    },
+    "sync-settings": {
+      "sync-future-days": 30,
+      "sync-past-days": 7,
+      "include-declined-events": false,
+      "include-cancelled-events": false,
+      "auto-generate-daily-logs": true
+    },
+    "event-filters": {
+      "min-duration-minutes": 0,
+      "exclude-private": false,
+      "exclude-keywords": []
+    },
+    "formatting": {
+      "time-format": "HH:mm",
+      "include-location": true,
+      "include-description": true,
+      "include-attendees": false,
+      "max-description-length": 200
+    },
+    "conflict-resolution": {
+      "strategy": "prefer-calendar",
+      "manual-review": true
+    }
+  }
+}

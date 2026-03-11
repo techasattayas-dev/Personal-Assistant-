@@ -1,0 +1,86 @@
+# Personal Assistant .gitignore
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Credentials and secrets
+*.key
+*.pem
+*credentials*.json
+.env
+.env.local
+
+# API keys and tokens (make sure these never get committed!)
+config/*credentials*
+**/oauth-token*
+**/refresh-token*
+
+# Sync logs (can contain sensitive information)
+Integrations/*/sync-log.md
+Integrations/*/*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Editor backups
+*.bak
+*.backup
+
+# Personal sensitive information
+# Uncomment these if you want to keep them private
+# Areas/Finance/expenses.md
+# Areas/Finance/investments.md
+# Areas/Finance/budget.md
+# Integrations/**/sync-config.json
+
+# Node modules (if using any automation scripts)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python (if using any Python scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Optional: Uncomment to exclude daily logs from version control
+# (Some people prefer to keep these private)
+# Schedule/daily/*.md
+# Schedule/weekly/*.md
+# Schedule/monthly/*.md
+
+# Optional: Uncomment to exclude inbox from version control
+# Inbox/*.md
+
+# Keep README files
+!**/README.md
+
+# Keep template files
+!Resources/Templates/*.md
+
+# Keep example files
+!**/*example*.md

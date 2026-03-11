@@ -1,0 +1,48 @@
+{
+  "gmail-sync": {
+    "enabled": true,
+    "sync-frequency-minutes": 15,
+    "labels-to-sync": [
+      "assistant",
+      "tasks",
+      "important"
+    ],
+    "label-mapping": {
+      "assistant": "Inbox/inbox.md",
+      "tasks": "Inbox/to-process.md",
+      "important": "Inbox/to-process.md"
+    },
+    "auto-capture": {
+      "enabled": true,
+      "capture-file": "Inbox/quick-capture.md",
+      "include-sender": true,
+      "include-subject": true,
+      "include-date": true,
+      "include-snippet": true,
+      "max-body-length": 500
+    },
+    "filters": {
+      "exclude-spam": true,
+      "exclude-promotions": true,
+      "exclude-social": true,
+      "exclude-forums": false,
+      "min-importance": "normal",
+      "sender-whitelist": [],
+      "sender-blacklist": []
+    },
+    "sync-settings": {
+      "batch-size": 50,
+      "lookback-days": 7,
+      "incremental-sync": true,
+      "mark-as-read": false,
+      "archive-after-sync": false
+    },
+    "task-extraction": {
+      "enabled": true,
+      "action-words": ["TODO", "ACTION", "TASK", "[ ]", "- [ ]"],
+      "extract-from-subject": true,
+      "extract-from-body": true,
+      "auto-create-tasks": false
+    }
+  }
+}

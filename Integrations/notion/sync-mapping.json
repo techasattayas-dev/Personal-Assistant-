@@ -1,0 +1,97 @@
+{
+  "notion-sync": {
+    "enabled": true,
+    "sync-frequency-minutes": 60,
+    "databases": {
+      "knowledge-base": {
+        "notion-database-id": "${NOTION_KB_DATABASE_ID}",
+        "local-path": "Resources/Knowledge-Base/Permanent-Notes",
+        "sync-direction": "bidirectional",
+        "field-mapping": {
+          "title": "Title",
+          "type": "Type",
+          "tags": "Tags",
+          "created": "Created",
+          "source": "Source"
+        },
+        "sync-content": true,
+        "preserve-notion-features": true
+      },
+      "tasks": {
+        "notion-database-id": "${NOTION_TASKS_DATABASE_ID}",
+        "local-path": "Projects/**/tasks.md",
+        "sync-direction": "bidirectional",
+        "field-mapping": {
+          "title": "Name",
+          "status": "Status",
+          "priority": "Priority",
+          "due-date": "Due Date",
+          "tags": "Tags",
+          "project": "Project",
+          "estimated-hours": "Estimate"
+        },
+        "sync-content": true,
+        "auto-create-local": true
+      },
+      "projects": {
+        "notion-database-id": "${NOTION_PROJECTS_DATABASE_ID}",
+        "local-path": "Projects",
+        "sync-direction": "bidirectional",
+        "field-mapping": {
+          "title": "Name",
+          "status": "Status",
+          "start-date": "Start Date",
+          "end-date": "End Date",
+          "owner": "Owner",
+          "progress": "Progress",
+          "tags": "Tags"
+        },
+        "sync-content": true,
+        "create-folder-structure": true
+      },
+      "journal": {
+        "notion-database-id": "${NOTION_JOURNAL_DATABASE_ID}",
+        "local-path": "Schedule/daily",
+        "sync-direction": "local-to-notion",
+        "field-mapping": {
+          "date": "Date",
+          "day": "Day",
+          "week": "Week",
+          "tags": "Tags"
+        },
+        "sync-content": true,
+        "auto-generate-entries": false
+      }
+    },
+    "sync-settings": {
+      "conflict-resolution": "manual",
+      "prefer-version": "newer",
+      "auto-resolve-threshold-hours": 24,
+      "preserve-notion-properties": true,
+      "sync-attachments": true,
+      "batch-size": 100
+    },
+    "markdown-export": {
+      "format": "commonmark",
+      "include-properties": true,
+      "wrap-width": 80,
+      "preserve-formatting": true
+    },
+    "notion-import": {
+      "block-types": [
+        "paragraph",
+        "heading_1",
+        "heading_2",
+        "heading_3",
+        "bulleted_list_item",
+        "numbered_list_item",
+        "to_do",
+        "toggle",
+        "quote",
+        "code",
+        "callout"
+      ],
+      "handle-unsupported-blocks": "convert-to-text"
+    }
+  }
+}
