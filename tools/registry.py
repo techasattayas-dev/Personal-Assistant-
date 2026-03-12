@@ -11,6 +11,8 @@ from tools.generate_chart import generate_chart
 from tools.save_output import save_output
 from tools.push_to_notion import push_to_notion
 from tools.export_pdf import export_pdf
+from tools.generate_image import generate_image
+from tools.design_infographic import design_infographic
 
 
 # Maps tool name -> handler function
@@ -21,6 +23,8 @@ _HANDLERS = {
     "save_output": save_output,
     "push_to_notion": push_to_notion,
     "export_pdf": export_pdf,
+    "generate_image": generate_image,
+    "design_infographic": design_infographic,
 }
 
 
@@ -188,6 +192,107 @@ TOOL_DEFINITIONS = [
                 },
             },
             "required": ["input_file"],
+        },
+    },
+    {
+        "name": "generate_image",
+        "description": (
+            "Generate images from text prompts using Google Gemini API. "
+            "Creates high-quality images for presentations, documents, social media, and creative content. "
+            "Supports various aspect ratios and sizes. Saves output as PNG to .tmp/."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "prompt": {
+                    "type": "string",
+                    "description": (
+                        "Detailed image generation prompt. Be specific about subject, style, colors, "
+                        "composition, and mood. Minimum 5 characters."
+                    ),
+                },
+                "aspect_ratio": {
+                    "type": "string",
+                    "enum": ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"],
+                    "description": "Image aspect ratio (default: 1:1). Use 16:9 for presentations, 9:16 for mobile, 3:4 for posters.",
+                },
+                "image_size": {
+                    "type": "string",
+                    "enum": ["512", "1K", "2K"],
+                    "description": "Output image resolution (default: 1K). Use 2K for print quality.",
+                },
+                "output_name": {
+                    "type": "string",
+                    "description": "Optional output filename (e.g. 'hero_banner.png'). Auto-generated if not provided.",
+                },
+                "style_prefix": {
+                    "type": "string",
+                    "description": (
+                        "Optional style instruction prepended to prompt. "
+                        "Examples: 'Photorealistic photography', 'Flat vector illustration', "
+                        "'Watercolor painting', 'Minimalist corporate design', 'Isometric 3D render'."
+                    ),
+                },
+            },
+            "required": ["prompt"],
+        },
+    },
+    {
+        "name": "design_infographic",
+        "description": (
+            "Design professional infographics and visual documents using Google Gemini API. "
+            "Supports dashboard, comparison, process_flow, timeline, statistics, org_chart, swot, and custom types. "
+            "Ideal for business presentations, reports, and data visualization. Saves output as PNG to .tmp/."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Infographic title displayed at the top of the design.",
+                },
+                "content": {
+                    "type": "string",
+                    "description": (
+                        "The data/text to visualize. Can be bullet points, statistics, process steps, "
+                        "comparison items, or any structured information."
+                    ),
+                },
+                "infographic_type": {
+                    "type": "string",
+                    "enum": ["dashboard", "comparison", "process_flow", "timeline", "statistics", "org_chart", "swot", "custom"],
+                    "description": (
+                        "Type of infographic layout. "
+                        "dashboard: KPI/metrics overview. comparison: side-by-side feature comparison. "
+                        "process_flow: step-by-step workflow. timeline: chronological milestones. "
+                        "statistics: big numbers with icons. org_chart: hierarchical structure. "
+                        "swot: SWOT analysis quadrant. custom: free-form design."
+                    ),
+                },
+                "color_scheme": {
+                    "type": "string",
+                    "description": "Optional color scheme (e.g. 'corporate blue and white', 'green sustainability theme', 'VCF Group brand colors: red and gold').",
+                },
+                "aspect_ratio": {
+                    "type": "string",
+                    "enum": ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"],
+                    "description": "Infographic aspect ratio (default: 3:4 portrait). Use 16:9 for slides, 9:16 for mobile.",
+                },
+                "image_size": {
+                    "type": "string",
+                    "enum": ["512", "1K", "2K"],
+                    "description": "Output resolution (default: 2K for print quality).",
+                },
+                "output_name": {
+                    "type": "string",
+                    "description": "Optional output filename. Auto-generated if not provided.",
+                },
+                "additional_instructions": {
+                    "type": "string",
+                    "description": "Any additional design instructions or requirements.",
+                },
+            },
+            "required": ["title", "content"],
         },
     },
 ]
