@@ -1,0 +1,161 @@
+business_unit: VC Meat Processing
+entity: VC Meat Processing
+description: Pig slaughterhouse, carcass processing, export operations
+review_frequency: monthly
+
+categories:
+  production:
+    label: Production
+    metrics:
+      carcasses_per_day:
+        label: Carcasses Processed/Day
+        unit: carcasses/day
+        target: 500
+        yellow_threshold: 400
+        red_threshold: 300
+        direction: higher_is_better
+
+      yield_rate:
+        label: Yield Rate
+        unit: "%"
+        target: 78
+        yellow_threshold: 74
+        red_threshold: 70
+        direction: higher_is_better
+
+      cold_chain_compliance:
+        label: Cold Chain Compliance
+        unit: "%"
+        target: 100
+        yellow_threshold: 95
+        red_threshold: 90
+        direction: higher_is_better
+
+      defect_rate:
+        label: Defect/Rejection Rate
+        unit: "%"
+        target: 1.0
+        yellow_threshold: 2.0
+        red_threshold: 3.0
+        direction: lower_is_better
+
+  export:
+    label: Export
+    metrics:
+      volume_hk:
+        label: Export Volume — Hong Kong
+        unit: carcasses/month
+        target: 3000
+        yellow_threshold: 2500
+        red_threshold: 2000
+        direction: higher_is_better
+
+      volume_sg:
+        label: Export Volume — Singapore
+        unit: carcasses/month
+        target: 3000
+        yellow_threshold: 2500
+        red_threshold: 2000
+        direction: higher_is_better
+
+      volume_my:
+        label: Export Volume — Malaysia
+        unit: carcasses/month
+        target: 6000
+        yellow_threshold: 5000
+        red_threshold: 4000
+        direction: higher_is_better
+
+      export_compliance:
+        label: Export Compliance Score
+        unit: "%"
+        target: 100
+        yellow_threshold: 95
+        red_threshold: 90
+        direction: higher_is_better
+
+      rejected_shipments:
+        label: Rejected Shipments
+        unit: count
+        target: 0
+        yellow_threshold: 1
+        red_threshold: 3
+        direction: lower_is_better
+
+  financial:
+    label: Financial
+    metrics:
+      revenue:
+        label: Revenue
+        unit: M THB
+        target: 80
+        yellow_threshold: 65
+        red_threshold: 50
+        direction: higher_is_better
+
+      processing_cost_per_carcass:
+        label: Processing Cost/Carcass
+        unit: THB
+        target: 350
+        yellow_threshold: 400
+        red_threshold: 450
+        direction: lower_is_better
+
+      margin_hk:
+        label: Margin — HK Market
+        unit: "%"
+        target: 18
+        yellow_threshold: 14
+        red_threshold: 10
+        direction: higher_is_better
+
+      margin_sg:
+        label: Margin — SG Market
+        unit: "%"
+        target: 16
+        yellow_threshold: 12
+        red_threshold: 8
+        direction: higher_is_better
+
+      margin_my:
+        label: Margin — MY Market
+        unit: "%"
+        target: 12
+        yellow_threshold: 9
+        red_threshold: 6
+        direction: higher_is_better
+
+  quality:
+    label: Quality & Compliance
+    metrics:
+      food_safety_audit:
+        label: Food Safety Audit Score
+        unit: "%"
+        target: 95
+        yellow_threshold: 85
+        red_threshold: 75
+        direction: higher_is_better
+
+      gmp_compliance:
+        label: GMP Compliance
+        unit: "%"
+        target: 100
+        yellow_threshold: 90
+        red_threshold: 80
+        direction: higher_is_better
+
+      haccp_compliance:
+        label: HACCP Compliance
+        unit: "%"
+        target: 100
+        yellow_threshold: 90
+        red_threshold: 80
+        direction: higher_is_better
+
+      customer_complaints:
+        label: Customer Complaints
+        unit: count
+        target: 0
+        yellow_threshold: 3
+        red_threshold: 5
+        direction: lower_is_better

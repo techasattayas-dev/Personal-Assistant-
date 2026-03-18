@@ -1,0 +1,145 @@
+business_unit: VC Meat Distribution
+entity: VC Meat Distribution
+description: 24 butcher shop branches across Thailand
+review_frequency: monthly
+
+categories:
+  sales:
+    label: Sales
+    metrics:
+      total_revenue:
+        label: Total Revenue
+        unit: M THB
+        target: 45
+        yellow_threshold: 38
+        red_threshold: 30
+        direction: higher_is_better
+
+      revenue_per_branch:
+        label: Revenue per Branch
+        unit: K THB
+        target: 1875
+        yellow_threshold: 1580
+        red_threshold: 1250
+        direction: higher_is_better
+
+      avg_transaction_value:
+        label: Avg Transaction Value
+        unit: THB
+        target: 250
+        yellow_threshold: 200
+        red_threshold: 150
+        direction: higher_is_better
+
+      items_per_transaction:
+        label: Items per Transaction
+        unit: items
+        target: 4.5
+        yellow_threshold: 3.5
+        red_threshold: 2.5
+        direction: higher_is_better
+
+      daily_customer_count:
+        label: Daily Customer Count (all branches)
+        unit: customers/day
+        target: 2400
+        yellow_threshold: 2000
+        red_threshold: 1600
+        direction: higher_is_better
+
+  operations:
+    label: Operations
+    metrics:
+      inventory_turnover:
+        label: Inventory Turnover
+        unit: days
+        target: 3
+        yellow_threshold: 5
+        red_threshold: 7
+        direction: lower_is_better
+
+      shrinkage_rate:
+        label: Shrinkage Rate
+        unit: "%"
+        target: 2.0
+        yellow_threshold: 3.5
+        red_threshold: 5.0
+        direction: lower_is_better
+
+      branch_utilization:
+        label: Branch Utilization
+        unit: "%"
+        target: 80
+        yellow_threshold: 65
+        red_threshold: 50
+        direction: higher_is_better
+
+      delivery_fulfillment:
+        label: Delivery Fulfillment Rate
+        unit: "%"
+        target: 98
+        yellow_threshold: 93
+        red_threshold: 88
+        direction: higher_is_better
+
+      stockout_incidents:
+        label: Stock-out Incidents
+        unit: count/month
+        target: 5
+        yellow_threshold: 10
+        red_threshold: 20
+        direction: lower_is_better
+
+  growth:
+    label: Growth
+    metrics:
+      active_branches:
+        label: Active Branches
+        unit: branches
+        target: 24
+        yellow_threshold: 22
+        red_threshold: 20
+        direction: higher_is_better
+
+      same_store_growth:
+        label: Same-Store Sales Growth
+        unit: "%"
+        target: 8
+        yellow_threshold: 4
+        red_threshold: 0
+        direction: higher_is_better
+
+      new_customer_acquisition:
+        label: New Customer Acquisition
+        unit: customers/month
+        target: 500
+        yellow_threshold: 350
+        red_threshold: 200
+        direction: higher_is_better
+
+  financial:
+    label: Financial
+    metrics:
+      gross_margin_per_branch:
+        label: Gross Margin per Branch
+        unit: "%"
+        target: 28
+        yellow_threshold: 22
+        red_threshold: 16
+        direction: higher_is_better
+
+      operating_cost_per_branch:
+        label: Operating Cost per Branch
+        unit: K THB
+        target: 400
+        yellow_threshold: 500
+        red_threshold: 600
+        direction: lower_is_better
+
+      total_net_profit:
+        label: Total Net Profit
+        unit: M THB
+        target: 8
+        yellow_threshold: 5
+        red_threshold: 2
+        direction: higher_is_better

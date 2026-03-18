@@ -1,0 +1,17 @@
+metric_key,actual,prior_period
+feed_output_tons_per_day,480,460
+feed_conversion_ratio,2.5,2.55
+pig_inventory,48000,47000
+mortality_rate,3.8,4.2
+average_daily_gain,780,760
+farrowing_rate,82,80
+revenue,142,138
+cogs,108,106
+gross_margin,23.9,23.2
+feed_cost_per_kg,12.5,12.8
+operating_expenses,22,21
+feedmill_utilization,82,78
+equipment_uptime,93,91
+biosecurity_compliance,95,92
+headcount,790,785
+pigs_per_employee,60.8,59.9

@@ -1,0 +1,163 @@
+business_unit: GT21 Myanmar
+entity: GT21 Group (Myanmar)
+description: International expansion — feedmill, pig farms, seed company, ethanol plant
+review_frequency: monthly
+
+categories:
+  construction:
+    label: Construction & Projects
+    metrics:
+      overall_completion:
+        label: Overall Project Completion
+        unit: "%"
+        target: 100
+        yellow_threshold: 80
+        red_threshold: 60
+        direction: higher_is_better
+
+      budget_vs_actual:
+        label: Budget vs Actual Spend
+        unit: "%"
+        target: 100
+        yellow_threshold: 110
+        red_threshold: 120
+        direction: lower_is_better
+        note: "100% = on budget, >100% = over budget"
+
+      schedule_variance:
+        label: Schedule Variance
+        unit: days
+        target: 0
+        yellow_threshold: 14
+        red_threshold: 30
+        direction: lower_is_better
+
+      supply_fulfillment:
+        label: Supply Order Fulfillment
+        unit: "%"
+        target: 95
+        yellow_threshold: 85
+        red_threshold: 70
+        direction: higher_is_better
+
+      drawing_completion:
+        label: Drawing Completion
+        unit: "%"
+        target: 100
+        yellow_threshold: 85
+        red_threshold: 70
+        direction: higher_is_better
+
+  feedmill:
+    label: Feedmill (Shwe Pyi)
+    metrics:
+      capacity_utilization:
+        label: Capacity Utilization
+        unit: "%"
+        target: 80
+        yellow_threshold: 60
+        red_threshold: 40
+        direction: higher_is_better
+
+      output_tons_per_day:
+        label: Output
+        unit: tons/day
+        target: 1440
+        yellow_threshold: 1100
+        red_threshold: 800
+        direction: higher_is_better
+        note: "Target based on 60 tons/hr x 24hr"
+
+      raw_material_inventory:
+        label: Raw Material Inventory
+        unit: days of supply
+        target: 14
+        yellow_threshold: 7
+        red_threshold: 3
+        direction: higher_is_better
+
+      commissioning_status:
+        label: Equipment Commissioning
+        unit: "%"
+        target: 100
+        yellow_threshold: 85
+        red_threshold: 70
+        direction: higher_is_better
+
+  farm:
+    label: Farm (Shwe Wat)
+    metrics:
+      pig_inventory:
+        label: Pig Inventory
+        unit: head
+        target: 19800
+        yellow_threshold: 16000
+        red_threshold: 12000
+        direction: higher_is_better
+        note: "18 barns x 1,100 pigs = 19,800 capacity"
+
+      barns_operational:
+        label: Barns Operational
+        unit: barns
+        target: 18
+        yellow_threshold: 14
+        red_threshold: 10
+        direction: higher_is_better
+
+      mortality_rate:
+        label: Mortality Rate
+        unit: "%"
+        target: 3.0
+        yellow_threshold: 5.0
+        red_threshold: 7.0
+        direction: lower_is_better
+
+      average_daily_gain:
+        label: Average Daily Gain (ADG)
+        unit: g/day
+        target: 750
+        yellow_threshold: 650
+        red_threshold: 550
+        direction: higher_is_better
+
+      feed_consumption:
+        label: Feed Consumption per Pig
+        unit: kg/day
+        target: 2.2
+        yellow_threshold: 2.5
+        red_threshold: 2.8
+        direction: lower_is_better
+
+  compliance:
+    label: Compliance & Regulatory
+    metrics:
+      seed_law_license:
+        label: Seed Law License (NDSC 14/2026)
+        unit: status
+        target: compliant
+        values: [compliant, in_progress, non_compliant]
+        direction: higher_is_better
+
+      fertilizer_law_license:
+        label: Fertilizer Law License (NDSC 15/2026)
+        unit: status
+        target: compliant
+        values: [compliant, in_progress, non_compliant]
+        direction: higher_is_better
+
+      export_certificates:
+        label: Export Certificates Valid
+        unit: count
+        target: 3
+        yellow_threshold: 2
+        red_threshold: 1
+        direction: higher_is_better
+        note: "Smog-free cert, Dept of Agriculture cert, trade permit"
+
+      environmental_compliance:
+        label: Environmental Compliance
+        unit: "%"
+        target: 100
+        yellow_threshold: 85
+        red_threshold: 70
+        direction: higher_is_better

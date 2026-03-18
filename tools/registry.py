@@ -13,6 +13,15 @@ from tools.push_to_notion import push_to_notion
 from tools.export_pdf import export_pdf
 from tools.generate_image import generate_image
 from tools.design_infographic import design_infographic
+from tools.kpi_calculator import calculate_kpis
+from tools.scrape_web import scrape_web
+from tools.read_notion_tasks import read_notion_tasks
+from tools.read_notion_projects import read_notion_projects
+from tools.read_notion_areas import read_notion_areas
+from tools.read_notion_resources import read_notion_resources
+from tools.read_notion_friends import read_notion_friends
+from tools.read_notion_command_center import read_notion_command_center
+from tools.google_maps import google_maps
 
 
 # Maps tool name -> handler function
@@ -25,6 +34,15 @@ _HANDLERS = {
     "export_pdf": export_pdf,
     "generate_image": generate_image,
     "design_infographic": design_infographic,
+    "calculate_kpis": calculate_kpis,
+    "scrape_web": scrape_web,
+    "read_notion_tasks": read_notion_tasks,
+    "read_notion_projects": read_notion_projects,
+    "read_notion_areas": read_notion_areas,
+    "read_notion_resources": read_notion_resources,
+    "read_notion_friends": read_notion_friends,
+    "read_notion_command_center": read_notion_command_center,
+    "google_maps": google_maps,
 }
 
 
@@ -151,26 +169,92 @@ TOOL_DEFINITIONS = [
     {
         "name": "push_to_notion",
         "description": (
-            "Push analysis results to a Notion page. Creates a new page in the configured "
-            "Notion database with the provided title and content (markdown)."
+            "Create an entry in any connected Notion database. Supports 6 targets: "
+            "'tasks' (create task with due date, recurring), "
+            "'projects' (create project with status, end date, folder), "
+            "'areas' (create area with pillar), "
+            "'resources' (create resource with tags), "
+            "'friends' (create contact with relationship, city, channel, contact info), "
+            "'notes' (create a generic page with title + markdown body). "
+            "Set 'target' to choose the database. Each target accepts its own specific properties."
         ),
         "input_schema": {
             "type": "object",
             "properties": {
                 "title": {
                     "type": "string",
-                    "description": "Title for the Notion page.",
+                    "description": "Title/name of the entry (required for all targets).",
+                },
+                "target": {
+                    "type": "string",
+                    "enum": ["tasks", "projects", "areas", "resources", "friends", "notes"],
+                    "description": (
+                        "Which Notion database to create the entry in. "
+                        "'tasks': [CC] Tasks DB, 'projects': [CC] Projects DB, "
+                        "'areas': [CC] Areas DB, 'resources': [CC] Resources DB, "
+                        "'friends': [CC] Friends DB, 'notes': Notes DB (default)."
+                    ),
                 },
                 "content": {
                     "type": "string",
-                    "description": "Markdown content for the page body.",
+                    "description": "Optional markdown body content appended as page blocks.",
                 },
                 "database_id": {
                     "type": "string",
-                    "description": "Optional Notion database ID. Uses NOTION_DATABASE_ID from .env if not provided.",
+                    "description": "Override database ID. Uses .env default for the target if not provided.",
+                },
+                "due_date": {
+                    "type": "string",
+                    "description": "ISO date (YYYY-MM-DD) for task due date. Target: tasks.",
+                },
+                "recurring": {
+                    "type": "boolean",
+                    "description": "Whether the task is recurring (default: false). Target: tasks.",
+                },
+                "status": {
+                    "type": "string",
+                    "enum": ["Not Started", "WIP", "Completed", "On Hold", "Archived"],
+                    "description": "Project status. Target: projects.",
+                },
+                "end_date": {
+                    "type": "string",
+                    "description": "ISO date (YYYY-MM-DD) for project end date. Target: projects.",
+                },
+                "folder_url": {
+                    "type": "string",
+                    "description": "Google Drive or folder URL. Target: projects.",
+                },
+                "pillar": {
+                    "type": "string",
+                    "enum": ["Personal", "Business", "Workplace"],
+                    "description": "Area pillar category. Target: areas.",
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Resource tags (e.g. ['SOP', 'Reference']). Target: resources.",
+                },
+                "relationship": {
+                    "type": "string",
+                    "enum": ["Friend", "Business", "Google", "EY", "Creator", "High School"],
+                    "description": "Relationship type. Target: friends.",
+                },
+                "city": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "City names (e.g. ['Bangkok', 'Chiang Mai']). Target: friends.",
+                },
+                "comms_channel": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Communication channels (e.g. ['LINE', 'Email']). Target: friends.",
+                },
+                "contact_info": {
+                    "type": "string",
+                    "description": "Contact information text (phone, email, etc.). Target: friends.",
                 },
             },
-            "required": ["title", "content"],
+            "required": ["title"],
         },
     },
     {
@@ -293,6 +377,345 @@ TOOL_DEFINITIONS = [
                 },
             },
             "required": ["title", "content"],
+        },
+    },
+    {
+        "name": "calculate_kpis",
+        "description": (
+            "Calculate KPI scorecard for a business unit. Reads KPI definitions from "
+            "Areas/Business-Units/{BU}/kpi-definitions.yaml and optionally loads actual data "
+            "from a CSV file. Returns a formatted markdown scorecard with traffic-light status "
+            "(GREEN/YELLOW/RED), achievement percentages, alerts, and trend analysis. "
+            "Available BUs: VCF-Group, VC-Meat-Processing, VC-Meat-Distribution, GT21-Myanmar."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "business_unit": {
+                    "type": "string",
+                    "enum": ["VCF-Group", "VC-Meat-Processing", "VC-Meat-Distribution", "GT21-Myanmar"],
+                    "description": "Business unit folder name.",
+                },
+                "period": {
+                    "type": "string",
+                    "description": "Report period in YYYY-MM format (e.g. '2026-03'). Used in header and auto-detects data file.",
+                },
+                "data_file": {
+                    "type": "string",
+                    "description": (
+                        "Optional path to CSV with actual KPI values. "
+                        "CSV columns: metric_key, actual, prior_period (optional). "
+                        "If not provided, auto-checks {BU}/data/kpi-{period}.csv."
+                    ),
+                },
+            },
+            "required": ["business_unit"],
+        },
+    },
+    {
+        "name": "scrape_web",
+        "description": (
+            "Scrape content from a web page. Uses Apify cloud scraper for robust JavaScript-rendered "
+            "content (requires APIFY_TOKEN in .env), automatically falls back to BeautifulSoup for "
+            "standard HTML when Apify quota is exhausted or unavailable. Returns extracted text content. "
+            "Use for research, competitor analysis, market data, news articles, and any web content extraction."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "description": "The URL to scrape (must start with http:// or https://).",
+                },
+                "content_selector": {
+                    "type": "string",
+                    "description": (
+                        "Optional CSS selector to extract specific content from the page. "
+                        "Examples: 'article', '.main-content', '#product-description', 'table.pricing'."
+                    ),
+                },
+                "max_content_length": {
+                    "type": "integer",
+                    "description": "Max characters to return (default: 50000). Reduce for focused extraction.",
+                },
+            },
+            "required": ["url"],
+        },
+    },
+    {
+        "name": "read_notion_tasks",
+        "description": (
+            "Read and summarize tasks from the Notion [CC] Tasks Database. "
+            "Returns a structured overview of open, overdue, and completed tasks with stats. "
+            "Supports three views: 'summary' (overview with overdue + upcoming), "
+            "'detailed' (full task list), 'overdue' (only overdue tasks). "
+            "Can filter by status: 'all', 'open', or 'done'."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "view": {
+                    "type": "string",
+                    "enum": ["summary", "detailed", "overdue"],
+                    "description": (
+                        "Output format. 'summary': overview with overdue + upcoming (default). "
+                        "'detailed': full list of all tasks. 'overdue': only overdue tasks."
+                    ),
+                },
+                "filter_status": {
+                    "type": "string",
+                    "enum": ["all", "open", "done"],
+                    "description": "Filter by task status. 'all' (default), 'open' (todo only), 'done' (completed only).",
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "read_notion_projects",
+        "description": (
+            "Read and summarize projects from the Notion [CC] Projects Database. "
+            "Returns a structured overview of all projects with status, timelines, "
+            "linked tasks/notes counts, and overdue detection. "
+            "Supports two views: 'summary' (overview table) and 'detailed' (full per-project info). "
+            "Can filter by status: 'all', 'wip', 'not_started', 'completed', 'on_hold', 'archived'."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "view": {
+                    "type": "string",
+                    "enum": ["summary", "detailed"],
+                    "description": (
+                        "Output format. 'summary': overview table (default). "
+                        "'detailed': full info per project with folder links."
+                    ),
+                },
+                "filter_status": {
+                    "type": "string",
+                    "enum": ["all", "wip", "not_started", "completed", "on_hold", "archived"],
+                    "description": "Filter by project status. 'all' (default), 'wip', 'not_started', 'completed', 'on_hold', 'archived'.",
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "read_notion_areas",
+        "description": (
+            "Read and summarize areas from the Notion [CC] Areas Database. "
+            "Returns areas grouped by pillar (Personal, Business, Workplace) "
+            "with linked projects and notes counts. "
+            "Supports two views: 'summary' (table per pillar) and 'detailed' (full per-area info). "
+            "Can filter by pillar: 'all', 'personal', 'business', 'workplace'."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "view": {
+                    "type": "string",
+                    "enum": ["summary", "detailed"],
+                    "description": "Output format. 'summary' (default) or 'detailed'.",
+                },
+                "filter_pillar": {
+                    "type": "string",
+                    "enum": ["all", "personal", "business", "workplace"],
+                    "description": "Filter by area pillar. 'all' (default), 'personal', 'business', 'workplace'.",
+                },
+                "include_archived": {
+                    "type": "boolean",
+                    "description": "Include archived areas (default: false).",
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "read_notion_resources",
+        "description": (
+            "Read and summarize resources from the Notion [CC] Resources Database. "
+            "Returns resources with tags (SOP, Reference, Records, Archived) "
+            "and linked areas/projects/notes counts. "
+            "Supports two views: 'summary' (table) and 'detailed' (full per-resource info). "
+            "Can filter by tag: 'all', 'sop', 'reference', 'records', 'archived'."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "view": {
+                    "type": "string",
+                    "enum": ["summary", "detailed"],
+                    "description": "Output format. 'summary' (default) or 'detailed'.",
+                },
+                "filter_tag": {
+                    "type": "string",
+                    "enum": ["all", "sop", "reference", "records", "archived"],
+                    "description": "Filter by tag. 'all' (default), 'sop', 'reference', 'records', 'archived'.",
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "read_notion_friends",
+        "description": (
+            "Read and summarize contacts from the Notion [CC] Friends Database. "
+            "Returns contacts with relationship type, city, communication channels, and contact info. "
+            "Supports two views: 'summary' (table) and 'detailed' (full contact info per person). "
+            "Can filter by relationship: 'all', 'friend', 'business', 'google', 'ey', 'creator', 'high_school'."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "view": {
+                    "type": "string",
+                    "enum": ["summary", "detailed"],
+                    "description": "Output format. 'summary' (default) or 'detailed'.",
+                },
+                "filter_relationship": {
+                    "type": "string",
+                    "enum": ["all", "friend", "business", "google", "ey", "creator", "high_school"],
+                    "description": "Filter by relationship type. 'all' (default).",
+                },
+                "include_archived": {
+                    "type": "boolean",
+                    "description": "Include archived contacts (default: false).",
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "read_notion_command_center",
+        "description": (
+            "Read the Notion Command Center dashboard page. Returns a unified view combining: "
+            "Today's routine checklist (daily to-dos), Tasks summary (open/overdue/due today), "
+            "Projects summary (by status + overdue), and Areas summary (by pillar). "
+            "Three views: 'dashboard' (full overview), 'today' (checklist only), "
+            "'status' (quick stats only). This is the main daily briefing tool."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "view": {
+                    "type": "string",
+                    "enum": ["dashboard", "today", "status"],
+                    "description": (
+                        "Output format. 'dashboard': full overview with today + tasks + projects + areas (default). "
+                        "'today': only today's routine checklist. "
+                        "'status': quick stats for tasks and projects."
+                    ),
+                },
+            },
+            "required": [],
+        },
+    },
+    {
+        "name": "google_maps",
+        "description": (
+            "Access Google Maps Platform APIs for location intelligence. "
+            "Actions: 'search_places' (text search for businesses/places), "
+            "'nearby_search' (find places near coordinates), "
+            "'place_details' (full info: phone, hours, website for a place_id), "
+            "'geocode' (address → coordinates), "
+            "'reverse_geocode' (coordinates → address), "
+            "'directions' (route with distance/duration between two points), "
+            "'distance_matrix' (distances between multiple origins/destinations), "
+            "'static_map' (generate map image with markers). "
+            "Useful for: finding suppliers, logistics planning, branch location analysis, "
+            "competitor mapping, delivery route optimization."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": [
+                        "search_places", "nearby_search", "place_details",
+                        "geocode", "reverse_geocode", "directions",
+                        "distance_matrix", "static_map",
+                    ],
+                    "description": "The Google Maps action to perform.",
+                },
+                "query": {
+                    "type": "string",
+                    "description": (
+                        "Search query or address. Used by: search_places (e.g. 'pig feed suppliers Phichit'), "
+                        "nearby_search (keyword filter), geocode (address to convert)."
+                    ),
+                },
+                "location": {
+                    "type": "string",
+                    "description": (
+                        "Location as 'lat,lng' (e.g. '13.7563,100.5018' for Bangkok) or address string. "
+                        "Used by: search_places (center point), nearby_search (required center), "
+                        "reverse_geocode (required), static_map (map center)."
+                    ),
+                },
+                "radius": {
+                    "type": "integer",
+                    "description": "Search radius in meters (default: 5000). Max: 50000. Used by search_places, nearby_search.",
+                },
+                "place_id": {
+                    "type": "string",
+                    "description": "Google Place ID from search results. Required for place_details action.",
+                },
+                "origin": {
+                    "type": "string",
+                    "description": "Starting point (address or lat,lng). Required for directions.",
+                },
+                "destination": {
+                    "type": "string",
+                    "description": "End point (address or lat,lng). Required for directions.",
+                },
+                "origins": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of origin addresses/coordinates. Required for distance_matrix.",
+                },
+                "destinations": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of destination addresses/coordinates. Required for distance_matrix.",
+                },
+                "mode": {
+                    "type": "string",
+                    "enum": ["driving", "walking", "bicycling", "transit"],
+                    "description": "Travel mode (default: driving). Used by directions, distance_matrix.",
+                },
+                "language": {
+                    "type": "string",
+                    "description": "Response language code (default: 'en'). Use 'th' for Thai.",
+                },
+                "place_type": {
+                    "type": "string",
+                    "description": (
+                        "Filter by place type (e.g. 'restaurant', 'supermarket', 'store', "
+                        "'food', 'veterinary_care', 'gas_station'). Used by search_places, nearby_search."
+                    ),
+                },
+                "max_results": {
+                    "type": "integer",
+                    "description": "Max number of results to return (default: 10, max: 20).",
+                },
+                "map_zoom": {
+                    "type": "integer",
+                    "description": "Map zoom level 1-20 (default: 14). Used by static_map.",
+                },
+                "map_size": {
+                    "type": "string",
+                    "description": "Map image size as 'WxH' (default: '600x400'). Used by static_map.",
+                },
+                "markers": {
+                    "type": "array",
+                    "items": {"type": "object"},
+                    "description": (
+                        "Map markers for static_map. Each marker: "
+                        "{'location': 'lat,lng or address', 'label': 'A', 'color': 'red'}."
+                    ),
+                },
+            },
+            "required": ["action"],
         },
     },
 ]

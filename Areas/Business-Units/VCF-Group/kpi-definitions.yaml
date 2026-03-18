@@ -1,0 +1,145 @@
+business_unit: VCF Group
+entity: VCF Group (Thailand)
+description: Pig farming + feed production operations
+review_frequency: monthly
+
+categories:
+  production:
+    label: Production
+    metrics:
+      feed_output_tons_per_day:
+        label: Feed Output
+        unit: tons/day
+        target: 500
+        yellow_threshold: 400
+        red_threshold: 300
+        direction: higher_is_better
+
+      feed_conversion_ratio:
+        label: Feed Conversion Ratio (FCR)
+        unit: ratio
+        target: 2.4
+        yellow_threshold: 2.6
+        red_threshold: 2.8
+        direction: lower_is_better
+
+      pig_inventory:
+        label: Pig Inventory
+        unit: head
+        target: 50000
+        yellow_threshold: 45000
+        red_threshold: 40000
+        direction: higher_is_better
+
+      mortality_rate:
+        label: Mortality Rate
+        unit: "%"
+        target: 3.0
+        yellow_threshold: 5.0
+        red_threshold: 7.0
+        direction: lower_is_better
+
+      average_daily_gain:
+        label: Average Daily Gain (ADG)
+        unit: g/day
+        target: 800
+        yellow_threshold: 700
+        red_threshold: 600
+        direction: higher_is_better
+
+      farrowing_rate:
+        label: Farrowing Rate
+        unit: "%"
+        target: 85
+        yellow_threshold: 78
+        red_threshold: 70
+        direction: higher_is_better
+
+  financial:
+    label: Financial
+    metrics:
+      revenue:
+        label: Revenue
+        unit: M THB
+        target: 150
+        yellow_threshold: 130
+        red_threshold: 110
+        direction: higher_is_better
+
+      cogs:
+        label: COGS
+        unit: M THB
+        target: 110
+        yellow_threshold: 125
+        red_threshold: 140
+        direction: lower_is_better
+
+      gross_margin:
+        label: Gross Margin
+        unit: "%"
+        target: 25
+        yellow_threshold: 20
+        red_threshold: 15
+        direction: higher_is_better
+
+      feed_cost_per_kg:
+        label: Feed Cost per kg
+        unit: THB/kg
+        target: 12.0
+        yellow_threshold: 13.5
+        red_threshold: 15.0
+        direction: lower_is_better
+
+      operating_expenses:
+        label: Operating Expenses
+        unit: M THB
+        target: 20
+        yellow_threshold: 25
+        red_threshold: 30
+        direction: lower_is_better
+
+  operational:
+    label: Operational
+    metrics:
+      feedmill_utilization:
+        label: Feedmill Utilization
+        unit: "%"
+        target: 85
+        yellow_threshold: 75
+        red_threshold: 65
+        direction: higher_is_better
+
+      equipment_uptime:
+        label: Equipment Uptime
+        unit: "%"
+        target: 95
+        yellow_threshold: 90
+        red_threshold: 85
+        direction: higher_is_better
+
+      biosecurity_compliance:
+        label: Biosecurity Compliance
+        unit: "%"
+        target: 100
+        yellow_threshold: 90
+        red_threshold: 80
+        direction: higher_is_better
+
+  hr:
+    label: Human Resources
+    metrics:
+      headcount:
+        label: Headcount
+        unit: persons
+        target: 800
+        yellow_threshold: 750
+        red_threshold: 700
+        direction: higher_is_better
+
+      pigs_per_employee:
+        label: Productivity (Pigs/Employee)
+        unit: head/person
+        target: 65
+        yellow_threshold: 55
+        red_threshold: 45
+        direction: higher_is_better

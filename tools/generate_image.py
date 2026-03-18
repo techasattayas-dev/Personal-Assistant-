@@ -7,7 +7,6 @@ Requires GEMINI_API_KEY in .env.
 """
 
 import os
-import base64
 from pathlib import Path
 from datetime import datetime
 
@@ -102,4 +101,8 @@ def generate_image(
     except ImportError:
         return "ERROR: google-genai package not installed. Run: pip install google-genai"
     except Exception as e:
-        return f"ERROR: Image generation failed: {type(e).__name__}: {e}"
+        # Sanitize error message to avoid leaking API keys
+        err_msg = str(e)
+        if api_key and api_key in err_msg:
+            err_msg = err_msg.replace(api_key, "[REDACTED]")
+        return f"ERROR: Image generation failed: {type(e).__name__}: {err_msg}"

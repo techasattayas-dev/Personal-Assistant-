@@ -74,9 +74,9 @@ def design_infographic(
     additional_instructions: str | None = None,
 ) -> str:
     """Design and generate a professional infographic using Gemini."""
-    if not title:
+    if not title or not title.strip():
         return "ERROR: Title is required."
-    if not content:
+    if not content or not content.strip():
         return "ERROR: Content is required. Provide the data/text to visualize."
 
     api_key = os.getenv("GEMINI_API_KEY")
@@ -175,4 +175,7 @@ def design_infographic(
     except ImportError:
         return "ERROR: google-genai package not installed. Run: pip install google-genai"
     except Exception as e:
-        return f"ERROR: Infographic generation failed: {type(e).__name__}: {e}"
+        err_msg = str(e)
+        if api_key and api_key in err_msg:
+            err_msg = err_msg.replace(api_key, "[REDACTED]")
+        return f"ERROR: Infographic generation failed: {type(e).__name__}: {err_msg}"
